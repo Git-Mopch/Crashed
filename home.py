@@ -1,8 +1,7 @@
-from colorama import Fore, Back, Style
-import os
-import getpass
-
 from colorama import Fore, Style
+import os
+import socket
+import getpass
 
 print(Fore.LIGHTYELLOW_EX + r"""
       /$$$$$$                        /$$    /$$        /$$$$$$        /$$
@@ -17,6 +16,7 @@ print(Fore.LIGHTYELLOW_EX + r"""
                                     \__/   (BY Mopch)                                                                                              
 """)
 print(Style.RESET_ALL)
+
 
 def limpiar_terminal():
     if os.name == 'nt':
@@ -38,21 +38,42 @@ introducir tu usuario y contraseña para """ + Fore.LIGHTBLUE_EX + """Crashed.
     print(Style.RESET_ALL)
     print("USR: " + user01 + " -- Pass: " + userPass01)
     # Llamar a funcion de comprobar en base de datos
-
-def registrarse():
-     print(Fore.LIGHTRED_EX + "[Opción: Resgistrarse]")
-     print(Style.RESET_ALL)
-     print("""
-#| Has seleccionado la opción de iniciar sesión, por ello vas a tener que
-introducir tu usuario y contraseña para """ + Fore.LIGHTBLUE_EX + """Crashed.
-              """)
-     print(Style.RESET_ALL)
-     user01 = input(Fore.LIGHTGREEN_EX + "[?] Usuario: ")
-     userPass01 = getpass.getpass('[?] Contraseña:')
-     print(Style.RESET_ALL)
-     print("USR: " + user01 + " -- Pass: " + userPass01)
-    # Llamar a funcion de comprobar en base de datos
     
+def registrarse():
+    print(Fore.LIGHTRED_EX + "[Opción: Registrarse]")  
+    print(Style.RESET_ALL)
+    print("""Has seleccionado la opción de registrarse, para ello tienes que
+    completar el formulario con tus datos.""")
+    
+    finForm = False
+    print(Style.RESET_ALL)
+
+    while not finForm:
+        user02 = input(Fore.LIGHTGREEN_EX + "[+] Usuario: ")
+        userMail02 = input(Fore.LIGHTGREEN_EX + "[+] Correo: ")
+        userPass02 = getpass.getpass('[+] Contraseña: ')
+        userVerPass02 = getpass.getpass('[+] Verifica Tu Contraseña: ')
+        host = socket.gethostname()
+        IPAddr = socket.gethostbyname(host)
+        print(Style.RESET_ALL)
+
+        if userPass02 == userVerPass02:
+            confReg = input("[?] ¿Estás segur@ " + Fore.LIGHTRED_EX + user02 + 
+                            Fore.LIGHTWHITE_EX + " con el correo " + 
+                            Fore.LIGHTMAGENTA_EX + userMail02 + 
+                            Fore.LIGHTWHITE_EX + ", que tus datos son correctos? [S/N]: ").strip()
+
+            if confReg.lower() == "s":
+                print("Si")  # Aquí llamas a la función que guarda los datos en la base de datos
+                finForm = True
+            else:
+                print("[X] Vuelve a intentarlo de nuevo!")
+                limpiar_terminal()
+        else:
+            print(Fore.LIGHTRED_EX + "[X] Las contraseñas no coinciden. Inténtalo de nuevo.")
+            limpiar_terminal()
+            print(Style.RESET_ALL)
+
 def menu():
     print("""
     #| Bienvenid@ a Crashed, con esta herramienta seras capaz de monitorizar 
@@ -66,29 +87,29 @@ def menu():
     3. Olvide Mi Contraseña
     4. Cerrar
           """)
-    respuesta01 = input(Fore.LIGHTWHITE_EX + "[+] Seleccione una opción: ")
-    if respuesta01 == "1":
-        limpiar_terminal()
-        iniciarSesion()
-    elif respuesta01 == "2":
-        limpiar_terminal()
-        registrarse()
+    try:
+        respuesta01 = input(Fore.LIGHTWHITE_EX + "[+] Seleccione una opción: ")
+        if respuesta01 == "1":
+            limpiar_terminal()
+            iniciarSesion()
+        elif respuesta01 == "2":
+            limpiar_terminal()
+            registrarse()
 
-    elif respuesta01 == "3":
-        limpiar_terminal()
-        print(""" En caso de no recordar
-         tu contraseña ponte en contacto conmigo mediante el correo:
-         ghostfaceQwerty@proton.me y mandame tu nombre de usuario,
-         ultima contraseña que recuerdes y el Codigo de Registro que se genero
-         cuando creaste la cuenta.""")
+        elif respuesta01 == "3":
+            limpiar_terminal()
+            print(""" En caso de no recordar tu contraseña ponte en contacto conmigo mediante el 
+ correo:"""+Fore.LIGHTMAGENTA_EX + """ghostfaceQwerty@proton.me """ + Fore.LIGHTWHITE_EX +
+                  """y mandame tu nombre de usuario,ultima 
+ contraseña que recuerdes y el Codigo de Registro.""")
 
-    elif respuesta01 == "4":
-        limpiar_terminal()
-        print("[Opción: Registrarse]")
-    else:
-        print("[x] Tienes que seleccionar una de las opciones disponibles")
-
+        elif respuesta01 == "4":
+            limpiar_terminal()
+            print("[Opción: Registrarse]")
+        else:
+            print("[x] Tienes que seleccionar una de las opciones disponibles")
+    except KeyboardInterrupt:
+        print("\n\nInterrupción del programa. Saliendo...")
+        exit(0)
 
 menu()
-
-
