@@ -2,6 +2,7 @@ from colorama import Fore, Style
 import os
 import socket
 import getpass
+from Bdsettings import DatabaseManager  # Importar la clase DatabaseManager
 
 print(Fore.LIGHTYELLOW_EX + r"""
       /$$$$$$                        /$$    /$$        /$$$$$$        /$$
@@ -15,15 +16,15 @@ print(Fore.LIGHTYELLOW_EX + r"""
                                 \_  $$_/                               
                                     \__/   (BY Mopch)                                                                                              
 """)
-print(Style.RESET_ALL)
 
+print(Style.RESET_ALL)
+db_manager = DatabaseManager()
 
 def limpiar_terminal():
     if os.name == 'nt':
         os.system('cls')
     else:
         os.system('clear')
-
 
 def iniciarSesion():
     print(Fore.LIGHTRED_EX + "[Opción: Iniciar Sesión]")
@@ -37,8 +38,7 @@ introducir tu usuario y contraseña para """ + Fore.LIGHTBLUE_EX + """Crashed.
     userPass01 = getpass.getpass('[?] Contraseña:')
     print(Style.RESET_ALL)
     print("USR: " + user01 + " -- Pass: " + userPass01)
-    # Llamar a funcion de comprobar en base de datos
-    
+    db_manager.comprobar_usuario(user01,userPass01)
 def registrarse():
     print(Fore.LIGHTRED_EX + "[Opción: Registrarse]")  
     print(Style.RESET_ALL)
