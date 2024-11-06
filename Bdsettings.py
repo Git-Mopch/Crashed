@@ -1,7 +1,5 @@
 import psycopg2  # type: ignore
 from colorama import Fore, Style
-from AMS import menuUserRegistered
-
 
 class DatabaseManager:
     def __init__(self):
@@ -47,31 +45,31 @@ class DatabaseManager:
             cursor.execute(insert_query, (username, email, password, ip, devName, "bs"))
             self.connection.commit()
             print(f"Usuario '{username}' insertado correctamente.")
-        
         except psycopg2.IntegrityError:
-            print(Fore.LIGHTRED_EX + f"[X] DETAIL: Ya existe laun usuario con el correo ({email}).")
+            print(Fore.LIGHTRED_EX + f"[X] DETAIL: Ya existe un usuario con el correo ({email}).")
             self.connection.rollback()
-    
         except Exception as e:
             print(Fore.LIGHTRED_EX + "\n[X] Error inesperado al insertar usuario:", e)
             self.connection.rollback()
-        
         finally:
             cursor.close()
 
     def comprobar_usuario(self, nombre, passwd):
+        """Verifica la existencia del usuario y llama a `menuUserRegistered` con el rol del usuario."""
         try:
             cursor = self.connection.cursor()
-            cursor.execute("SELECT * FROM us00rs_cr4sh3d where nombreUsuario = '" +
-                           nombre + "' and password = '" + passwd + "';")
-            usuarios = cursor.fetchall()
-            if not usuarios:
-                print(Fore.LIGHTRED_EX+ "[x] Error: No se encontró ningún usuario con ese nombre y contraseña.")
+            query = "SELECT RolUserMainCreate FROM us00rs_cr4sh3d WHERE nombreUsuario = %s AND password = %s;"
+            cursor.execute(query, (nombre, passwd))
+            usuario = cursor.fetchone()
+            if not usuario:
+                print(Fore.LIGHTRED_EX + "[X] Error: No se encontró ningún usuario con ese nombre y contraseña.")
                 print(Style.RESET_ALL)
             else:
-                menuUserRegistered(nombre)
+                from AMS import menuUserRegistered  # Importación diferida
+                rol = usuario[0]
+                menuUserRegistered(nombre, rol)
         except Exception as e:
-            print("Error al mostrar usuarios:", e)
+            print("Error al verificar el usuario:", e)
         finally:
             cursor.close()
 

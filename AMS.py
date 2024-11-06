@@ -1,9 +1,8 @@
-#Aplication Menu Settings
 from colorama import Fore, Style
 import os
-import socket
+from Bdsettings import DatabaseManager  
 
-print(Style.RESET_ALL)
+db_manager = DatabaseManager()
 
 def limpiar_terminal():
     if os.name == 'nt':
@@ -11,20 +10,40 @@ def limpiar_terminal():
     else:
         os.system('clear')
 
-def menuUserRegistered(nom):
+def menuUserRegistered(nombre, rol):
     limpiar_terminal()
-    print(Fore.LIGHTGREEN_EX+ "["+Fore.LIGHTBLUE_EX+"O"+Fore.LIGHTGREEN_EX+"] Bienvenid@ " + nom)
+    print(Fore.LIGHTGREEN_EX + f"Bienvenido {nombre}")
     print(Style.RESET_ALL)
-    print("""
-    #| Bienvenid@ a Crashed, con esta herramienta seras capaz de monitorizar 
-    precios de productos y analizar tu competencia para garantizar una buena 
-    gestion de tu negocio. 
-          """)
-    print("""
-    (OPCIONES)
-    1. Iniciar Sesión
-    2. Registrarse
-    3. Olvide Mi Contraseña
-    4. Cerrar
-          """)
-
+    if(rol == "gh"):
+        limpiar_terminal()
+        print(f"""{Fore.LIGHTWHITE_EX}
+#| Bienvenid@ {Fore.LIGHTCYAN_EX + nombre + Fore.LIGHTWHITE_EX}(Admin), un placer tenerte de nuevo, ¿con que te puedo
+ayudar en el dia de hoy?
+            """)
+        print(f"""
+{Fore.LIGHTMAGENTA_EX}(OPCIONES){Fore.LIGHTWHITE_EX}
+        1. Seleccionar sesión activa.
+        2. Crear una nueva sesión.
+        3. Eliminar sesión
+        4. Buscar usuario.
+        5. Añadir usuario.
+        6. Eliminar usuario.
+        7. Salir
+            """)
+        #Añadir funcionalidades de Admin
+        
+    elif(rol =="gt" or rol == "bs"):
+        limpiar_terminal()
+        print(f"""{Fore.LIGHTWHITE_EX}
+#| Bienvenid@ {Fore.LIGHTCYAN_EX + nombre + Fore.LIGHTWHITE_EX}, un placer tenerte de nuevo, ¿con que te puedo
+ayudar en el dia de hoy?
+            """)
+        print(f"""
+{Fore.LIGHTMAGENTA_EX}(OPCIONES){Fore.LIGHTWHITE_EX}
+    1. Seleccionar sesión activa.
+    2. Crear una nueva sesión.
+    3. Eliminar sesión
+    4. Salir
+            """)
+    
+    #Añadir funcionalidades de User
