@@ -1,4 +1,7 @@
-import psycopg2 # type: ignore
+import psycopg2  # type: ignore
+from colorama import Fore, Style
+from AMS import menuUserRegistered
+
 
 class DatabaseManager:
     def __init__(self):
@@ -12,9 +15,8 @@ class DatabaseManager:
                 user="postgres",
                 password="032003",
                 host="localhost",
-                port="5432"  
+                port="5432"
             )
-            print("Conexión exitosa")
             return connection
         except Exception as e:
             print("Error al conectar a PostgreSQL:", e)
@@ -34,31 +36,40 @@ class DatabaseManager:
         finally:
             cursor.close()
 
-    def insertar_usuario(self, username, email, password, is_active=True):
+    def insertar_usuario(self, username, email, password, ip, devName):
         """Inserta un nuevo usuario en la base de datos."""
         try:
             cursor = self.connection.cursor()
             insert_query = """
-            INSERT INTO usuarios (username, email, password, is_active)
-            VALUES (%s, %s, %s, %s);
+            INSERT INTO us00rs_cr4sh3d (nombreUsuario, email, password, ip, deviceName, RolUserMainCreate)
+            VALUES (%s, %s, %s, %s, %s, %s);
             """
-            cursor.execute(insert_query, (username, email, password, is_active))
+            cursor.execute(insert_query, (username, email, password, ip, devName, "bs"))
             self.connection.commit()
             print(f"Usuario '{username}' insertado correctamente.")
-        except Exception as e:
-            print("Error al insertar usuario:", e)
+        
+        except psycopg2.IntegrityError:
+            print(Fore.LIGHTRED_EX + f"[X] DETAIL: Ya existe laun usuario con el correo ({email}).")
             self.connection.rollback()
+    
+        except Exception as e:
+            print(Fore.LIGHTRED_EX + "\n[X] Error inesperado al insertar usuario:", e)
+            self.connection.rollback()
+        
         finally:
             cursor.close()
-            
-    def comprobar_usuario(self,nombre,passwd):
+
+    def comprobar_usuario(self, nombre, passwd):
         try:
             cursor = self.connection.cursor()
-            cursor.execute("SELECT * FROM us00rs_cr4sh3d where nombreUsuario = '" + nombre + "' and password = '" +passwd + "';" )
+            cursor.execute("SELECT * FROM us00rs_cr4sh3d where nombreUsuario = '" +
+                           nombre + "' and password = '" + passwd + "';")
             usuarios = cursor.fetchall()
-            print("Usuario:")
-            for usuario in usuarios:
-                print(usuario)
+            if not usuarios:
+                print(Fore.LIGHTRED_EX+ "[x] Error: No se encontró ningún usuario con ese nombre y contraseña.")
+                print(Style.RESET_ALL)
+            else:
+                menuUserRegistered(nombre)
         except Exception as e:
             print("Error al mostrar usuarios:", e)
         finally:

@@ -37,8 +37,8 @@ introducir tu usuario y contraseña para """ + Fore.LIGHTBLUE_EX + """Crashed.
     user01 = input(Fore.LIGHTGREEN_EX + "[?] Usuario: ")
     userPass01 = getpass.getpass('[?] Contraseña:')
     print(Style.RESET_ALL)
-    print("USR: " + user01 + " -- Pass: " + userPass01)
     db_manager.comprobar_usuario(user01,userPass01)
+    
 def registrarse():
     print(Fore.LIGHTRED_EX + "[Opción: Registrarse]")  
     print(Style.RESET_ALL)
@@ -64,7 +64,7 @@ def registrarse():
                             Fore.LIGHTWHITE_EX + ", que tus datos son correctos? [S/N]: ").strip()
 
             if confReg.lower() == "s":
-                print("Si")  # Aquí llamas a la función que guarda los datos en la base de datos
+                db_manager.insertar_usuario(user02,userMail02,userPass02,host,IPAddr)
                 finForm = True
             else:
                 print("[X] Vuelve a intentarlo de nuevo!")
