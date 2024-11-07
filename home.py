@@ -2,7 +2,7 @@ from colorama import Fore, Style
 import os
 import socket
 import getpass
-from Bdsettings import DatabaseManager  # Importar la clase DatabaseManager
+from Bdsettings import DatabaseManager 
 
 print(Fore.LIGHTYELLOW_EX + r"""
       /$$$$$$                        /$$    /$$        /$$$$$$        /$$
